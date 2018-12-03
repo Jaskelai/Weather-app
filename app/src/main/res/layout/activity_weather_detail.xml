@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".WeatherDetailActivity">
+
+    <TextView
+        android:id="@+id/details_city_name_label"
+        style="@style/InfoTextAppearance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/city_label"
+        app:layout_constraintEnd_toStartOf="@id/details_city_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/details_city_name"
+        style="@style/InfoTextAppearance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        app:layout_constraintStart_toEndOf="@id/details_city_name_label"
+        app:layout_constraintTop_toTopOf="@id/details_city_name_label" />
+
+    <TextView
+        android:id="@+id/details_temperature_label"
+        style="@style/InfoTextAppearance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/temperature_label"
+        app:layout_constraintStart_toStartOf="@id/details_city_name_label"
+        app:layout_constraintTop_toBottomOf="@id/details_city_name_label" />
+
+    <TextView
+        android:id="@+id/details_temperature"
+        style="@style/InfoTextAppearance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        app:layout_constraintStart_toEndOf="@id/details_temperature_label"
+        app:layout_constraintTop_toTopOf="@id/details_temperature_label" />
+
+    <TextView
+        android:id="@+id/details_humidity_label"
+        style="@style/InfoTextAppearance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/humidity_label"
+        app:layout_constraintStart_toStartOf="@id/details_temperature_label"
+        app:layout_constraintTop_toBottomOf="@id/details_temperature_label" />
+
+    <TextView
+        android:id="@+id/details_humidity"
+        style="@style/InfoTextAppearance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        app:layout_constraintStart_toEndOf="@id/details_humidity_label"
+        app:layout_constraintTop_toTopOf="@id/details_humidity_label" />
+
+    <TextView
+        android:id="@+id/details_pressure_label"
+        style="@style/InfoTextAppearance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/pressure_label"
+        app:layout_constraintStart_toStartOf="@id/details_humidity_label"
+        app:layout_constraintTop_toBottomOf="@id/details_humidity_label" />
+
+    <TextView
+        android:id="@+id/details_pressure"
+        style="@style/InfoTextAppearance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        app:layout_constraintStart_toEndOf="@id/details_pressure_label"
+        app:layout_constraintTop_toTopOf="@id/details_pressure_label" />
+
+    <TextView
+        android:id="@+id/details_wind_label"
+        style="@style/InfoTextAppearance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/wind_label"
+        app:layout_constraintStart_toStartOf="@id/details_pressure_label"
+        app:layout_constraintTop_toBottomOf="@id/details_pressure_label" />
+
+    <TextView
+        android:id="@+id/details_wind"
+        style="@style/InfoTextAppearance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        app:layout_constraintStart_toEndOf="@id/details_wind_label"
+        app:layout_constraintTop_toTopOf="@id/details_wind_label" />
+</android.support.constraint.ConstraintLayout>
