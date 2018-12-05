@@ -10,6 +10,7 @@ import kotlinx.android.synthetic.main.cities_list_item.view.*
 
 class CityAdapter(items: ArrayList<City>)
     : RecyclerView.Adapter<CityAdapter.CityHolder>() {
+
     private var cities: ArrayList<City> = items
     private lateinit var listCallback: ListCallback
 

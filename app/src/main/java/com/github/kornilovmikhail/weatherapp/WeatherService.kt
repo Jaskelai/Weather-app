@@ -13,8 +13,8 @@ object WeatherService {
 
     fun service(): OpenWeatherApi {
         val okHttpClient = OkHttpClient.Builder()
-                .addInterceptor(ApiKeyInterceptor.create())
-                .addInterceptor(MetricInterceptor.create())
+                .addInterceptor(ApiKeyInterceptor.instance)
+                .addInterceptor(MetricInterceptor.instance)
                 .build()
 
         val retrofit = Retrofit.Builder()

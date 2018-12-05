@@ -8,6 +8,6 @@ import retrofit2.http.Query
 
 interface OpenWeatherApi {
     @GET("find")
-    fun loadCities(@Query("lat") lat: Double, @Query("lon") lon: Double,
-                   @Query("cnt") cnt: Int): Flowable<ListCities>
+    fun loadCities(@Query("lat") lat: Double?, @Query("lon") lon: Double?,
+                   @Query("cnt") cnt: Int?): Flowable<ListCities>
 }

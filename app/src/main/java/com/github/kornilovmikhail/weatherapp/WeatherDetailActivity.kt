@@ -14,10 +14,10 @@ class WeatherDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_weather_detail)
         cities = CityRepository.getCities()
         position = intent.getIntExtra("position", 0)
-        details_city_name.text = cities[position].name
-        details_temperature.text = cities[position].currentTemp.currentTemp.toString()
-        details_humidity.text = cities[position].currentTemp.humidity.toString()
-        details_pressure.text = cities[position].currentTemp.pressure.toString()
+        tv_details_city_name.text = cities[position].name
+        tv_details_temperature.text = cities[position].currentTemp.currentTemp.toString()
+        tv_details_humidity.text = cities[position].currentTemp.humidity.toString()
+        tv_details_pressure.text = cities[position].currentTemp.pressure.toString()
         val direction: String = when (cities[position].wind.deg) {
             in 0..22 -> "N"
             in 23..67 -> "NE"
@@ -30,7 +30,7 @@ class WeatherDetailActivity : AppCompatActivity() {
             in 338..359 -> "N"
             else -> "N/A"
         }
-        details_wind.text = direction
+        tv_details_wind.text = direction
     }
 
 }

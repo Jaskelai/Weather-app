@@ -5,7 +5,6 @@ import okhttp3.Response
 import java.io.IOException
 
 class MetricInterceptor private constructor() : Interceptor {
-    private val system = "metric"
 
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
@@ -16,13 +15,9 @@ class MetricInterceptor private constructor() : Interceptor {
     }
 
     companion object {
-        private var metricInterceptor: MetricInterceptor? = null
-
-        fun create(): Interceptor {
-            if (metricInterceptor == null) {
-                metricInterceptor = MetricInterceptor()
-            }
-            return metricInterceptor as MetricInterceptor
+        private const val system = "metric"
+        val instance: MetricInterceptor by lazy {
+            MetricInterceptor()
         }
     }
 }

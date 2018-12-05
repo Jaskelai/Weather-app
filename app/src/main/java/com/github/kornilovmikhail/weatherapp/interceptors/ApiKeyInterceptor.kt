@@ -6,7 +6,6 @@ import okhttp3.Interceptor
 import okhttp3.Response
 
 class ApiKeyInterceptor private constructor() : Interceptor {
-    private val apiKey = "2a57d6a2bc61c91c0a4cd3243f70bb0e"
 
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
@@ -17,13 +16,9 @@ class ApiKeyInterceptor private constructor() : Interceptor {
     }
 
     companion object {
-        private var apiKeyInterceptor: ApiKeyInterceptor? = null
-
-        fun create(): Interceptor {
-            if (apiKeyInterceptor == null) {
-                apiKeyInterceptor = ApiKeyInterceptor()
-            }
-            return apiKeyInterceptor as ApiKeyInterceptor
+        private const val apiKey = "2a57d6a2bc61c91c0a4cd3243f70bb0e"
+        val instance: ApiKeyInterceptor by lazy {
+            ApiKeyInterceptor()
         }
     }
 }
