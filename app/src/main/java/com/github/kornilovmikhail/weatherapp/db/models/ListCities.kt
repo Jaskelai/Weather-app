@@ -1,4 +1,4 @@
-package com.github.kornilovmikhail.weatherapp.entities
+package com.github.kornilovmikhail.weatherapp.db.models
 
 import com.google.gson.annotations.SerializedName
 

@@ -4,14 +4,14 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.github.kornilovmikhail.weatherapp.entities.City
+import com.github.kornilovmikhail.weatherapp.db.models.City
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.cities_list_item.view.*
 
-class CityAdapter(items: ArrayList<City>)
+class CityAdapter(items: List<City>)
     : RecyclerView.Adapter<CityAdapter.CityHolder>() {
 
-    private var cities: ArrayList<City> = items
+    private var cities: List<City> = items
     private lateinit var listCallback: ListCallback
 
     override fun onCreateViewHolder(parent: ViewGroup, type: Int): CityHolder {

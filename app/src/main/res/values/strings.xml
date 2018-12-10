@@ -8,4 +8,9 @@
     <string name="humidity_label">Humidity:</string>
     <string name="pressure_label">Pressure:</string>
     <string name="wind_label">Wind direction:</string>
+    <string name="perm_reason">GPS permissions is needed to show nearest cities</string>
+    <string name="perm_not_granted">Permissions not granted</string>
+    <string name="settings">SETTINGS</string>
+    <string name="cities_loaded">Cities loaded</string>
+    <string name="server_fault">Something went wrong</string>
 </resources>

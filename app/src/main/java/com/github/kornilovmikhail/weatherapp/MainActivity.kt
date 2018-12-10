@@ -1,5 +1,6 @@
 package com.github.kornilovmikhail.weatherapp
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -16,24 +17,35 @@ import android.provider.Settings
 import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.DividerItemDecoration
 import android.widget.Toast
-import com.github.kornilovmikhail.weatherapp.entities.City
+import com.github.kornilovmikhail.weatherapp.db.repositories.WeatherDBRepository
+import com.github.kornilovmikhail.weatherapp.db.WeatherDatabase
+import com.github.kornilovmikhail.weatherapp.db.models.City
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 
 
-class MainActivity : AppCompatActivity(), ListCallback {
+class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener, ListCallback {
 
     private val code = 147
+
     private lateinit var lm: LocationManager
-    private lateinit var mCompositeDisposable: CompositeDisposable
+    private val mCompositeDisposable: CompositeDisposable = CompositeDisposable()
+    private var location: Location? = null
+    private lateinit var cityRepository: WeatherDBRepository
+    private lateinit var database: WeatherDatabase
 
 
+    @SuppressLint("CheckResult")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        database = WeatherDatabase.getInstance(this)
+        cityRepository = WeatherDBRepository(database)
         rv_cities.layoutManager = LinearLayoutManager(this)
         rv_cities.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         lm = getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -41,14 +53,28 @@ class MainActivity : AppCompatActivity(), ListCallback {
                 != PackageManager.PERMISSION_GRANTED) {
             requestPermissionRationale()
         } else {
-            val location: Location? = getLocation()
-            getCities(location)
+            cityRepository.getCities()
+                    .subscribeBy(onSuccess = {
+                        if (!it.isEmpty()) {
+                            rv_cities.adapter = CityAdapter(it)
+                        } else {
+                            location = getLocation()
+                            updateInfo(location)
+                        }
+                    }, onError = {})
+
         }
+        activity_main.setOnRefreshListener(this)
+    }
+
+    override fun onRefresh() {
+        val location: Location? = getLocation()
+        updateInfo(location)
     }
 
     private fun requestPermissionRationale() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_FINE_LOCATION)) {
-            val message = "GPS permissions is needed to show nearest cities"
+            val message = getString(R.string.perm_reason)
             Snackbar.make(findViewById(R.id.activity_main), message, Snackbar.LENGTH_LONG)
                     .setAction("GRANT") {
                         requestPerms()
@@ -78,13 +104,13 @@ class MainActivity : AppCompatActivity(), ListCallback {
 
         if (allowed) {
             val location = getLocation()
-            getCities(location)
+            updateInfo(location)
         } else showPermsOnSetting()
     }
 
     private fun showPermsOnSetting() {
-        Snackbar.make(findViewById(R.id.activity_main), "Permissions not granted", Snackbar.LENGTH_LONG)
-                .setAction("SETTINGS") { openApplicationSettings() }
+        Snackbar.make(findViewById(R.id.activity_main), getString(R.string.perm_not_granted), Snackbar.LENGTH_LONG)
+                .setAction(getString(R.string.settings)) { openApplicationSettings() }
                 .show()
     }
 
@@ -108,22 +134,25 @@ class MainActivity : AppCompatActivity(), ListCallback {
         return bestLocation
     }
 
-    private fun getCities(location: Location?) {
-        val mCompositeDisposable = CompositeDisposable()
+    private fun updateInfo(location: Location?) {
         val longitude = location?.longitude
         val latitude = location?.latitude
         val client = WeatherService.service()
+        var cities: List<City> = ArrayList()
+        cityRepository.deleteCities()
         mCompositeDisposable.add(client.loadCities(latitude, longitude, 20)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map { response ->
-                    CityRepository.setCities(response.listCities as ArrayList<City>)
+                    cityRepository.setCities(response.listCities)
+                    cities = response.listCities
                 }
                 .subscribe({
-                    rv_cities.adapter = CityAdapter(CityRepository.getCities())
-                    Toast.makeText(this, "Cities loaded", Toast.LENGTH_SHORT).show()
+                    rv_cities.adapter = CityAdapter(cities)
+                    activity_main.isRefreshing = false
+                    Toast.makeText(this, getString(R.string.cities_loaded), Toast.LENGTH_SHORT).show()
                 }, {
-                    Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.server_fault), Toast.LENGTH_SHORT).show()
                 }))
     }
 
@@ -136,5 +165,6 @@ class MainActivity : AppCompatActivity(), ListCallback {
     override fun onDestroy() {
         super.onDestroy()
         mCompositeDisposable.clear()
+        database.close()
     }
 }
