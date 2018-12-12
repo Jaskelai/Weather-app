@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Погода</string>
+    <string name="cities_list_heading">Ближайшие города:</string>
+    <string name="grant">Предоставить разрешение</string>
+    <string name="temperature_label">Температура:</string>
+    <string name="city_label">Город:</string>
+    <string name="humidity_label">Влажность:</string>
+    <string name="pressure_label">Давление:</string>
+    <string name="wind_label">Направление ветра:</string>
+    <string name="perm_reason">Разрешение для местоположения нужно чтобы показывать ближайшие города</string>
+    <string name="perm_not_granted">Разрешение не выдано</string>
+    <string name="settings">НАСТРОЙКИ</string>
+    <string name="cities_loaded">Города обновлены</string>
+    <string name="server_fault">Что-то пошло не так…</string>
+</resources>

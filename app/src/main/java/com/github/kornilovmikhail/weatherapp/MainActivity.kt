@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener, 
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_FINE_LOCATION)) {
             val message = getString(R.string.perm_reason)
             Snackbar.make(findViewById(R.id.activity_main), message, Snackbar.LENGTH_LONG)
-                    .setAction("GRANT") {
+                    .setAction(getString(R.string.grant)) {
                         requestPerms()
                     }
                     .show()
