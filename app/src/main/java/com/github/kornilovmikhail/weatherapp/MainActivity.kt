@@ -20,9 +20,9 @@ import android.support.v4.content.ContextCompat
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.DividerItemDecoration
 import android.widget.Toast
-import com.github.kornilovmikhail.weatherapp.db.repositories.WeatherDBRepository
 import com.github.kornilovmikhail.weatherapp.db.WeatherDatabase
 import com.github.kornilovmikhail.weatherapp.db.models.City
+import com.github.kornilovmikhail.weatherapp.db.services.WeatherDBService
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
@@ -36,8 +36,9 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener, 
     private lateinit var lm: LocationManager
     private val mCompositeDisposable: CompositeDisposable = CompositeDisposable()
     private var location: Location? = null
-    private lateinit var cityRepository: WeatherDBRepository
+    private lateinit var weatherDBService: WeatherDBService
     private lateinit var database: WeatherDatabase
+    private val NUM_CITIES = 20
 
 
     @SuppressLint("CheckResult")
@@ -45,7 +46,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener, 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         database = WeatherDatabase.getInstance(this)
-        cityRepository = WeatherDBRepository(database)
+        weatherDBService = WeatherDBService(database)
         rv_cities.layoutManager = LinearLayoutManager(this)
         rv_cities.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         lm = getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -53,10 +54,11 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener, 
                 != PackageManager.PERMISSION_GRANTED) {
             requestPermissionRationale()
         } else {
-            cityRepository.getCities()
+            var adapter = rv_cities.adapter
+            weatherDBService.getCities()
                     .subscribeBy(onSuccess = {
                         if (!it.isEmpty()) {
-                            rv_cities.adapter = CityAdapter(it)
+                            adapter = CityAdapter(it)
                         } else {
                             location = getLocation()
                             updateInfo(location)
@@ -139,16 +141,17 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener, 
         val latitude = location?.latitude
         val client = WeatherService.service()
         var cities: List<City> = ArrayList()
-        cityRepository.deleteCities()
-        mCompositeDisposable.add(client.loadCities(latitude, longitude, 20)
-                .subscribeOn(Schedulers.io())
+        var adapter: CityAdapter = rv_cities.adapter as CityAdapter
+        weatherDBService.deleteCities()
+        mCompositeDisposable.add(client.loadCities(latitude, longitude, NUM_CITIES)
                 .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
                 .map { response ->
-                    cityRepository.setCities(response.listCities)
+                    weatherDBService.setCities(response.listCities)
                     cities = response.listCities
                 }
                 .subscribe({
-                    rv_cities.adapter = CityAdapter(cities)
+                    adapter = CityAdapter(cities)
                     activity_main.isRefreshing = false
                     Toast.makeText(this, getString(R.string.cities_loaded), Toast.LENGTH_SHORT).show()
                 }, {

@@ -1,4 +1,4 @@
-package com.github.kornilovmikhail.weatherapp.db.repositories
+package com.github.kornilovmikhail.weatherapp.repositories
 
 import com.github.kornilovmikhail.weatherapp.db.models.City
 
@@ -11,7 +11,7 @@ class WeatherMemoryRepository {
         }
 
         fun setCities(cities: List<City>) {
-            this.cities = cities
+            Companion.cities = cities
         }
     }
 }

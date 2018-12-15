@@ -3,7 +3,7 @@ package com.github.kornilovmikhail.weatherapp
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import com.github.kornilovmikhail.weatherapp.db.models.City
-import com.github.kornilovmikhail.weatherapp.db.repositories.WeatherMemoryRepository
+import com.github.kornilovmikhail.weatherapp.repositories.WeatherMemoryRepository
 import kotlinx.android.synthetic.main.activity_weather_detail.*
 
 class WeatherDetailActivity : AppCompatActivity() {

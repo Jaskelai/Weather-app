@@ -1,14 +1,15 @@
-package com.github.kornilovmikhail.weatherapp.db.repositories
+package com.github.kornilovmikhail.weatherapp.db.services
 
 import android.annotation.SuppressLint
 import com.github.kornilovmikhail.weatherapp.db.WeatherDatabase
+import com.github.kornilovmikhail.weatherapp.repositories.WeatherMemoryRepository
 import com.github.kornilovmikhail.weatherapp.db.models.City
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
-class WeatherDBRepository(private val database: WeatherDatabase) {
+class WeatherDBService(private val database: WeatherDatabase) {
 
     fun setCities(cities: List<City>) {
         Completable.fromAction {
