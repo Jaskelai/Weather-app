@@ -54,11 +54,10 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener, 
                 != PackageManager.PERMISSION_GRANTED) {
             requestPermissionRationale()
         } else {
-            var adapter = rv_cities.adapter
             weatherDBService.getCities()
                     .subscribeBy(onSuccess = {
                         if (!it.isEmpty()) {
-                            adapter = CityAdapter(it)
+                            CityAdapter(it)
                         } else {
                             location = getLocation()
                             updateInfo(location)
@@ -141,7 +140,6 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener, 
         val latitude = location?.latitude
         val client = WeatherService.service()
         var cities: List<City> = ArrayList()
-        var adapter: CityAdapter = rv_cities.adapter as CityAdapter
         weatherDBService.deleteCities()
         mCompositeDisposable.add(client.loadCities(latitude, longitude, NUM_CITIES)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -151,7 +149,7 @@ class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener, 
                     cities = response.listCities
                 }
                 .subscribe({
-                    adapter = CityAdapter(cities)
+                    CityAdapter(cities)
                     activity_main.isRefreshing = false
                     Toast.makeText(this, getString(R.string.cities_loaded), Toast.LENGTH_SHORT).show()
                 }, {
